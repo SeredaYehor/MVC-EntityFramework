@@ -1,0 +1,32 @@
+﻿@model List<Worker>
+
+@{
+    Worker worker = new Worker();
+    int id = 0;
+    string login = "";
+}
+
+@foreach (Worker row in Model)
+{
+    <p>@row.ID:@row.Login</p>
+}
+
+@using (Html.BeginForm("AddToDb", "Home", FormMethod.Post))
+{
+    <label>Login:@Html.TextBoxFor(model => worker.Login)</label>
+    <input type="submit" value="Add to database" />
+}
+
+@using (Html.BeginForm("RemoveFromDb", "Home", FormMethod.Post))
+{
+    <label>ID:@Html.TextBoxFor(model => id)</label>
+    <input type="submit" value="Delete from database" />
+}
+
+@using (Html.BeginForm("Update", "Home", FormMethod.Post))
+{
+    <label>ID:@Html.TextBoxFor(model => id)</label>
+    <br />
+    <label>Login:@Html.TextBoxFor(model => login)</label>
+    <input type="submit" value="Update to database" />
+}
