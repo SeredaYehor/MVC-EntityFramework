@@ -12,6 +12,7 @@ namespace MVC_DB.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        DbModel local = new DbModel();
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -21,12 +22,9 @@ namespace MVC_DB.Controllers
         public IActionResult AddToDb(Worker worker)
         {
             List<Worker> result = new List<Worker>();
-            using (DbModel local = new DbModel())
-            {
-                local.example.Add(worker);
-                local.SaveChanges();
-                result = local.example.Select(x => x).ToList();
-            }
+            local.example.Add(worker);
+            local.SaveChanges();
+            result = local.example.Select(x => x).ToList();
             return View("GetData", result);
         }
 
@@ -34,13 +32,10 @@ namespace MVC_DB.Controllers
         {
             Worker remove = new Worker();
             List<Worker> result = new List<Worker>();
-            using (DbModel local = new DbModel())
-            {
-                remove = local.example.Find(id);
-                local.example.Remove(remove);
-                local.SaveChanges();
-                result = local.example.Select(x => x).ToList();
-            }
+            remove = local.example.Find(id);
+            local.example.Remove(remove);
+            local.SaveChanges();
+            result = local.example.Select(x => x).ToList();
             return View("GetData", result);
         }
 
@@ -51,25 +46,19 @@ namespace MVC_DB.Controllers
             updated.ID = id;
             updated.Login = login;
             List<Worker> result = new List<Worker>();
-            using (DbModel local = new DbModel())
+            edit = local.example.Find(id);
+            if (edit != null)
             {
-                edit = local.example.Find(id);
-                if (edit != null)
-                {
-                    local.Entry(edit).CurrentValues.SetValues(updated);
-                    local.SaveChanges();
-                }
-                result = local.example.Select(x => x).ToList();
+                local.Entry(edit).CurrentValues.SetValues(updated);
+                local.SaveChanges();
             }
+            result = local.example.Select(x => x).ToList();
             return View("GetData", result);
         }
         public IActionResult GetData()
         {
             List<Worker> result = new List<Worker>();
-            using (DbModel local = new DbModel())
-            {
-                result = local.example.Select(x => x).ToList();
-            }
+            result = local.example.Select(x => x).ToList();
             return View(result);
         }
         public IActionResult Index()
